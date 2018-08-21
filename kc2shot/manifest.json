@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "艦これ2期スクショ",
-  "description": "艦これ2期のスクリーンショットを撮ります。",
-  "version": "1.0",
+  "name": "艦これ二期スクショ",
+  "description": "艦これ二期のスクリーンショットを撮ります。",
+  "version": "1.1",
   "browser_action": {
     "default_title": "KanColle2 Screenshot"
   },
@@ -11,9 +11,10 @@
   },
   "content_scripts" :[
     {
-      "matches": ["http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"],
-      "js": ["content.js"], 
-      "run_at": "document_end"
+      "matches": ["http://*/kcs2/index.php*"],
+      "js": ["kc2_content.js"], 
+      "run_at": "document_end",
+      "all_frames": true
     }
   ],
   "permissions": [

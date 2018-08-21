@@ -1,48 +1,24 @@
 // 艦これタブのスクリーンショットを撮って、ゲーム画面部分を切り抜いて画像ファイルとしてダウンロードする。
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-    chrome.tabs.captureVisibleTab(null, {format:"png"}, (base64Data) => {
-
-        chrome.tabs.sendMessage(tab.id, { command: 'offsetRequest' }, (msg) => {
-            if(!msg.offset) return;
-
-            crop(base64Data, msg.offset, (cropped) => {
-                var blob = base64toBlob(cropped);
-                var fileName = generateFileNameWithoutExtension() + '.jpg';
-        
-                // blobデータをa要素を使ってダウンロード
-                saveBlob(blob, fileName);
-            });
-        });
-    });
-  });
+    chrome.tabs.sendMessage(tab.id, { command: 'takeScreenshot', format: "jpeg" }, null);
+});
 
 
-var croppingCanvas = undefined;
-let kcWidth = 1200;
-let kcHeight = 720;
+chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse){
+    console.log(msg);
+    
+    if(!msg.type || msg.type !== 'screenshotResult') return;
 
-// 艦これゲーム画面部分を切り抜く
-function crop(base64DataUrl, offset, callback) {
-    if(!croppingCanvas) croppingCanvas = document.createElement('canvas');
+    var extension = msg.format === 'jpeg' ? '.jpg' : '.png';
 
-    croppingCanvas.width = kcWidth;
-    croppingCanvas.height = kcHeight;
+    // 艦これのcanvasから生成した画像データ
+    var blob = base64toBlob(msg.data);
+    var fileName = generateFileNameWithoutExtension() + extension;
 
-    var image = new Image();
-    image.onload = function() {
-        croppingCanvas.getContext('2d').drawImage(image,
-            offset.left, offset.top, kcWidth, kcHeight,
-            0, 0, kcWidth, kcHeight);
-
-        var croppedDataUrl = croppingCanvas.toDataURL("image/jpeg");
-
-        callback(croppedDataUrl);
-    };
-
-    image.src = base64DataUrl;
-}
-
+    // blobデータをa要素を使ってダウンロード
+    saveBlob(blob, fileName);
+});
 
 // Base64 DataURLをBlobデータに変換
 // [Data URLs - HTTP | MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
