@@ -6,6 +6,7 @@
   "browser_action": {
     "default_title": "KanColle2 Screenshot"
   },
+  "options_page": "options.html",
   "background": {
     "page": "background.html"
   },
@@ -20,6 +21,6 @@
   "permissions": [
     "tabs",
     "activeTab",
-    "desktopCapture"
+    "storage"
   ]
 }
