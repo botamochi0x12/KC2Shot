@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "艦これ二期スクショ",
-  "description": "艦これ二期のスクリーンショットを撮ります。",
-  "version": "1.1",
+  "name": "艦これ2期スクショ",
+  "description": "艦これ2期のスクリーンショットを撮ります。",
+  "version": "1.2",
   "browser_action": {
     "default_title": "KanColle2 Screenshot"
   },
