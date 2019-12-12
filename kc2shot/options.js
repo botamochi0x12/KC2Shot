@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    var select = document.getElementById('imageFormatSelet');
+    var select = document.getElementById('imageFormatSelection');
 
     select.add(new Option('jpeg', 'jpeg'));
     select.add(new Option('png', 'png'));
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function selectValue(value) {
-    var select = document.getElementById('imageFormatSelet');
+    var select = document.getElementById('imageFormatSelection');
 
     for (let index = 0; index < select.length; index++) {
         if(select.options[index].value === value)
