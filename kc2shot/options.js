@@ -2,8 +2,8 @@
 document.addEventListener("DOMContentLoaded", function(event) {
     var select = document.getElementById('imageFormatSelection');
 
-    select.add(new Option('jpeg', 'jpeg'));
     select.add(new Option('png', 'png'));
+    select.add(new Option('jpeg', 'jpeg'));
 
     select.onchange = function() {
         var selectedItem = this.options[ this.selectedIndex ];
@@ -29,8 +29,8 @@ function getCurrentFormat(callback) {
     chrome.storage.sync.get("imageFormat", function(items) {
         if(!items.imageFormat)
         {
-            setCurrentFormat('jpeg');
-            items.imageFormat = 'jpeg';
+            setCurrentFormat('png');
+            items.imageFormat = 'png';
         }
 
         callback(items.imageFormat);
