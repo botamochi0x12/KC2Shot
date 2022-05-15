@@ -2,7 +2,8 @@
   "manifest_version": 2,
   "name": "艦これ2期スクショ",
   "description": "艦これ2期のスクリーンショットを撮ります。",
-  "version": "1.4",
+  "version": "1.5.0-alpha",
+  "version_name": "1.5a",
   "icons": {
     "48": "images/icon_48.png",
     "128": "images/icon_128.png",
