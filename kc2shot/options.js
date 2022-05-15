@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
     getCurrentFormat((current) => selectFormat(current));
     
-    var selector = document.getElementById('imageNamingPrefix');
+    var selector = document.getElementById('imageFileNamePrefix');
 
     selector.add(new Option('KanColle2nd', 'KanColle2nd-'));
 
@@ -54,7 +54,7 @@ function setCurrentFormat(value) {
 
 
 function selectNamingPrefix(value) {
-    var select = document.getElementById('imageNamingPrefix');
+    var select = document.getElementById('imageFileNamePrefix');
 
     for (let index = 0; index < select.length; index++) {
         if(select.options[index].value === value)
@@ -66,17 +66,17 @@ function selectNamingPrefix(value) {
 }
 
 function getCurrentNamingPrefix(callback) {
-    chrome.storage.sync.get("imageNamingPrefix", function(items) {
-        if(!items.imageNamingPrefix)
+    chrome.storage.sync.get("imageFileNamePrefix", function(items) {
+        if(!items.imageFileNamePrefix)
         {
             setCurrentNamingPrefix('KanColle2nd');
-            items.imageNamingPrefix = 'KanColle2nd-';
+            items.imageFileNamePrefix = 'KanColle2nd-';
         }
 
-        callback(items.imageNamingPrefix);
+        callback(items.imageFileNamePrefix);
     });
 }
 
 function setCurrentNamingPrefix(value) {
-    chrome.storage.sync.set({"imageNamingPrefix": value}, null);
+    chrome.storage.sync.set({"imageFileNamePrefix": value}, null);
 }
