@@ -9,11 +9,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
         var selectedItem = this.options[ this.selectedIndex ];
         setCurrentFormat(selectedItem.value);
     };
+    
+    getCurrentFormat((current) => selectFormat(current));
+    
+    var selector = document.getElementById('imageNamingPrefix');
 
-    getCurrentFormat((current) => selectValue(current));
+    selector.add(new Option('KanColle2nd', 'KanColle2nd-'));
+
+    selector.onchange = function() {
+        var selectedItem = this.options[ this.selectedIndex ];
+        setCurrentPrefix(selectedItem.value);
+    };
+    
+    getCurrentNamingPrefix((current) => selectNamingPrefix(current));
 });
 
-function selectValue(value) {
+function selectFormat(value) {
     var select = document.getElementById('imageFormatSelection');
 
     for (let index = 0; index < select.length; index++) {
@@ -26,17 +37,46 @@ function selectValue(value) {
 }
 
 function getCurrentFormat(callback) {
-    chrome.storage.sync.get("imageFormat", function(items) {
-        if(!items.imageFormat)
+    chrome.storage.sync.get("imageFormatSelection", function(items) {
+        if(!items.imageFormatSelection)
         {
             setCurrentFormat('png');
-            items.imageFormat = 'png';
+            items.imageFormatSelection = 'png';
         }
 
-        callback(items.imageFormat);
+        callback(items.imageFormatSelection);
     });
 }
 
 function setCurrentFormat(value) {
-    chrome.storage.sync.set({"imageFormat": value}, null);
+    chrome.storage.sync.set({"imageFormatSelection": value}, null);
+}
+
+
+function selectNamingPrefix(value) {
+    var select = document.getElementById('imageNamingPrefix');
+
+    for (let index = 0; index < select.length; index++) {
+        if(select.options[index].value === value)
+        {
+            select.selectedIndex = index;
+            break;
+        }
+    }
+}
+
+function getCurrentNamingPrefix(callback) {
+    chrome.storage.sync.get("imageNamingPrefix", function(items) {
+        if(!items.imageNamingPrefix)
+        {
+            setCurrentNamingPrefix('KanColle2nd');
+            items.imageNamingPrefix = 'KanColle2nd-';
+        }
+
+        callback(items.imageNamingPrefix);
+    });
+}
+
+function setCurrentNamingPrefix(value) {
+    chrome.storage.sync.set({"imageNamingPrefix": value}, null);
 }

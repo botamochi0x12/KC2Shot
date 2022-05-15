@@ -1,11 +1,14 @@
 // 艦これタブのスクリーンショットを撮って、ゲーム画面部分を切り抜いて画像ファイルとしてダウンロードする。
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-    chrome.storage.sync.get("imageFormat", (items) => {
-        chrome.tabs.sendMessage(tab.id, { command: 'takeScreenshot', format: items.imageFormat }, null);
+    chrome.storage.sync.get(["imageFormatSelection", "imageNamingPrefix"], (items) => {
+        chrome.tabs.sendMessage(tab.id, { 
+            command: 'takeScreenshot', 
+            format: items.imageFormatSelection,
+            namingPrefix: items.imageNamingPrefix },
+            null);
     });
 });
-
 
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse){
     console.log(msg);
