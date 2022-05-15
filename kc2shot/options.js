@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var selector = document.getElementById('imageFileNamePrefix');
 
     selector.add(new Option('KanColle2nd', 'KanColle2nd-'));
+    selector.add(new Option('KC2', 'KC2-'));
+    selector.add(new Option('(none)', ''));
 
     selector.onchange = function() {
         var selectedItem = this.options[ this.selectedIndex ];
