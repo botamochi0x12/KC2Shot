@@ -1,12 +1,14 @@
 // 艦これタブのスクリーンショットを撮って、ゲーム画面部分を切り抜いて画像ファイルとしてダウンロードする。
 
-chrome.browserAction.onClicked.addListener(function (tab) {
+// Crhome拡張のアイコンがクリックされた時の処理。
+chrome.action.onClicked.addListener((tab) => {
+    // 保存形式を設定から読み込んで、艦これタブにスクショ撮影リクエストを送る。
     chrome.storage.sync.get("imageFormat", (items) => {
         chrome.tabs.sendMessage(tab.id, { command: 'takeScreenshot', format: items.imageFormat }, null);
     });
 });
 
-
+// 艦これタブで撮影されたスクショデータを受け取ってファイルに保存する。
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse){
     console.log(msg);
     
@@ -14,45 +16,16 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse){
 
     var extension = msg.format === 'jpeg' ? '.jpg' : '.png';
 
-    // 艦これのcanvasから生成した画像データ
-    var blob = base64toBlob(msg.data);
     var fileName = generateFileNameWithoutExtension() + extension;
 
-    // blobデータをa要素を使ってダウンロード
-    saveBlob(blob, fileName);
+    // 艦これのcanvasから生成した画像データ(Data URLs)をファイルとしてダウンロードする。
+    // [Data URLs - HTTP | MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
+    chrome.downloads.download({
+        url: msg.data,
+        filename: fileName
+    })
 });
 
-// Base64 DataURLをBlobデータに変換
-// [Data URLs - HTTP | MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
-function base64toBlob(base64) {
-    var tmp = base64.split(',');
-    
-    var data = atob(tmp[1]);
-    var mime = tmp[0].split(':')[1].split(';')[0];
-
-    var buf = new Uint8Array(data.length);
-    for (var i = 0; i < data.length; i++) {
-        buf[i] = data.charCodeAt(i);
-    }
-
-    var blob = new Blob([buf], { type: mime });
-    return blob;
-}
-
-// 画像のダウンロード
-function saveBlob(blob, fileName) {
-    var url = (window.URL || window.webkitURL);
-    var dataUrl = url.createObjectURL(blob);
-
-    var event = document.createEvent("MouseEvents");
-    event.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-
-    var a = document.createElementNS("http://www.w3.org/1999/xhtml", "a");
-    a.href = dataUrl;
-    a.download = fileName;
-
-    a.dispatchEvent(event);
-}
 
 function generateFileNameWithoutExtension() {
     var now = new Date(Date.now());
